@@ -79,7 +79,7 @@ function generatePalette() {
     const baseLight = Math.floor(Math.random() * 20) + 40; // Lightness 40-60%
 
     // 2. Pick a random Harmony Rule
-    const harmonyRules = ["analogous", "monochromatic", "triadic", "complementary", "compound"];
+    const harmonyRules = ["analogous", "monochromatic", "triadic", "complementary"];
     const selectedRule = harmonyRules[Math.floor(Math.random() * harmonyRules.length)];
 
     console.log(`Generating based on: ${selectedRule}`); // Check console to see which rule was used
@@ -99,9 +99,6 @@ function generatePalette() {
             break;
         case "complementary":
             hslColors = generateComplementary(baseHue, baseSat, baseLight);
-            break;
-        case "compound":
-            hslColors = generateCompound(baseHue, baseSat, baseLight);
             break;
         default:
             hslColors = generateAnalogous(baseHue, baseSat, baseLight);
@@ -160,17 +157,17 @@ function generateComplementary(h, s, l) {
     ];
 }
 
-function generateCompound(h, s, l) {
-    // Base + Complement + Neighbors of complement (Split Complementary-ish)
-    const compH = (h + 180) % 360;
-    return [
-        { h: h, s: s, l: l },
-        { h: (compH - 30 + 360) % 360, s: s, l: l },
-        { h: (compH + 30) % 360, s: s, l: l },
-        { h: h, s: s, l: l + 20 },
-        { h: compH, s: s - 30, l: l + 10 }
-    ];
-}
+// function generateCompound(h, s, l) {
+//     // Base + Complement + Neighbors of complement (Split Complementary-ish)
+//     const compH = (h + 180) % 360;
+//     return [
+//         { h: h, s: s, l: l },
+//         { h: (compH - 30 + 360) % 360, s: s, l: l },
+//         { h: (compH + 30) % 360, s: s, l: l },
+//         { h: h, s: s, l: l + 20 },
+//         { h: compH, s: s - 30, l: l + 10 }
+//     ];
+// }
 
 // HELPER: HSL → HEX
 function hslToHex(h, s, l) {
