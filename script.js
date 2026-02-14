@@ -1,4 +1,3 @@
-
 // DOM ELEMENTS
 const generateBtn = document.getElementById("generate-btn");
 const saveBtn = document.getElementById("save-btn");
@@ -11,19 +10,23 @@ const STORAGE_KEY = "savedPalettes";
 // EVENTS
 generateBtn.addEventListener("click", generatePalette);
 saveBtn.addEventListener("click", saveCurrentPalette);
-
+// //
 // Load saved palettes on startup, but DO NOT generate new colors yet.
 // This keeps your HTML hardcoded colors visible until the button is clicked.
 renderSavedPalettes();
 
 paletteContainer.addEventListener("click", (e) => {
+    //this will use copyBtn as the target
     const copyBtn = e.target.closest(".copy-btn");
+
+    //if clicked then...
     if (copyBtn) {
         const hexValue = copyBtn.previousElementSibling.textContent;
         copyToClipboard(hexValue, copyBtn);
         return;
     }
 
+    //if clicked then...
     const colorEl = e.target.closest(".color");
     if (colorEl) {
         const hexValue = colorEl.nextElementSibling.querySelector(".hex-value").textContent;
@@ -35,6 +38,8 @@ paletteContainer.addEventListener("click", (e) => {
 // COPY FEEDBACK
 function copyToClipboard(text, icon) {
     if(!icon) return;
+
+    //This will proceed the icon to showCopySuccess
     navigator.clipboard.writeText(text).then(() => {
         showCopySuccess(icon);
     });
@@ -82,7 +87,7 @@ function generatePalette() {
     const harmonyRules = ["analogous", "monochromatic", "triadic", "complementary"];
     const selectedRule = harmonyRules[Math.floor(Math.random() * harmonyRules.length)];
 
-    console.log(`Generating based on: ${selectedRule}`); // Check console to see which rule was used
+   // console.log(Generating based on: ${selectedRule}); // Check console to see which rule was used
 
     // 3. Generate colors based on that rule
     let hslColors = [];
@@ -126,9 +131,9 @@ function generateAnalogous(h, s, l) {
 function generateMonochromatic(h, s, l) {
     // Same Hue, different Lightness/Saturation
     return [
-        { h: h, s: s, l: l },
         { h: h, s: s, l: l + 20 }, // Lighter
         { h: h, s: s, l: l + 40 }, // Very Light
+        { h: h, s: s, l: l },
         { h: h, s: s, l: Math.max(0, l - 20) }, // Darker
         { h: h, s: Math.max(0, s - 30), l: l + 10 } // Desaturated
     ];
@@ -189,6 +194,8 @@ function hslToHex(h, s, l) {
 
 // UI UPDATE
 function updatePaletteDisplay(colors) {
+
+    //this will change the color in the container
     document.querySelectorAll(".color-box").forEach((box, index) => {
         if(box && colors[index]) {
             box.querySelector(".color").style.backgroundColor = colors[index];
@@ -199,9 +206,13 @@ function updatePaletteDisplay(colors) {
 
 // SAVE PALETTES
 function saveCurrentPalette() {
+
+    //grabs all elements showing hex values on the page.
+    //It returns a NodeList (array-like, but not a real array).
     const palette = [...document.querySelectorAll(".hex-value")]
         .map(el => el.textContent);
 
+    //load the local storage
     const saved = getSavedPalettes();
     
     // Check for duplicates
@@ -211,23 +222,31 @@ function saveCurrentPalette() {
         return;
     }
 
+    //will add to the local storage
     saved.push(palette);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
     renderSavedPalettes();
 }
 
 function getSavedPalettes() {
+    //get the value from the local storage
     return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
 }
 
 function renderSavedPalettes() {
+
+    //this is for adding to the created container
     const palettes = getSavedPalettes();
+
+    //this will hide the container for the palette beside the color body container
 
     if (palettes.length === 0) {
         savedPalettesContainer.classList.add("hidden");
         savedPalettesContainer.innerHTML = "";
         return;
     }
+
+    //this will remove hidden from html id and will proceed to render the css style
 
     savedPalettesContainer.classList.remove("hidden");
     savedPalettesContainer.innerHTML = "";
@@ -238,6 +257,33 @@ function renderSavedPalettes() {
         wrapper.style.alignItems = "center";
         wrapper.style.marginBottom = "10px";
         wrapper.style.gap = "6px";
+        wrapper.style.justifyContent = "space-between"; 
+        wrapper.style.borderRadius = "20px";
+
+        const icon = document.createElement("i");
+        icon.className = "fa fa-save";
+        icon.style.color = "#eff4f1";
+
+        // 1. CREATE THE CALL BUTTON
+        // const callBtn = document.createElement("button");
+        // callBtn.textContent = "load";
+        // callBtn.style.cursor = "pointer";
+        // callBtn.style.padding = "4px 8px";
+        // callBtn.style.borderRadius = "4px";
+        // callBtn.style.border = "none";
+        // callBtn.style.backgroundColor = "#0c2c64";
+        // callBtn.style.color = "white";
+        // callBtn.style.fontSize = "0.75rem";
+        // callBtn.style.fontWeight = "bold";
+        // callBtn.style.transition = "all 0.2s ease";
+    
+
+        // 2. CREATE COLOR SWATCHES GROUP
+
+        const swatchGroup = document.createElement("div");
+        swatchGroup.style.display = "flex";
+        swatchGroup.style.gap = "4px";
+        swatchGroup.borderRadius = "20px";
 
         palette.forEach(color => {
             const swatch = document.createElement("div");
@@ -245,9 +291,36 @@ function renderSavedPalettes() {
             swatch.style.height = "30px";
             swatch.style.borderRadius = "6px";
             swatch.style.backgroundColor = color;
-            wrapper.appendChild(swatch);
+            swatchGroup.appendChild(swatch);
         });
 
+           icon.onclick = () => {
+            // Update the main UI
+            updatePaletteDisplay(palette);
+
+            // Visual Feedback
+            // const originalText = callBtn.textContent;
+            // const originalBg = callBtn.style.backgroundColor;
+            
+            icon.className = "fa fa-check";
+            icon.style.color = "#17a90a"; // Success Green
+            delBtn.style.color = "#180101";
+            wrapper.style.backgroundColor = "rgb(245, 250, 247)";
+            wrapper.style.padding = "5px";
+            wrapper.style.transition = 
+            "background-color 0.3s ease";
+
+            
+            setTimeout(() => {
+                icon.className = "fa fa-save";
+                icon.style.color = "#eff4f1";
+                wrapper.style.backgroundColor = "";
+                delBtn.style.color = "#FF0000";
+                wrapper.style.padding = "";
+            }, 1000);
+        };
+
+        // 3. CREATE DELETE BUTTON
         const delBtn = document.createElement("button");
         delBtn.textContent = "✕";
         delBtn.style.cursor = "pointer";
@@ -257,7 +330,12 @@ function renderSavedPalettes() {
         delBtn.style.color = "#FF0000";
         delBtn.onclick = () => deletePalette(index);
 
-        wrapper.appendChild(delBtn);
+        // ASSEMBLY
+        wrapper.appendChild(icon);    
+        wrapper.appendChild(swatchGroup); 
+        wrapper.appendChild(delBtn);     
+        
+        // this will be added to the div container for the saved palettes
         savedPalettesContainer.appendChild(wrapper);
     });
 }
