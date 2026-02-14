@@ -259,6 +259,8 @@ function renderSavedPalettes() {
         wrapper.style.gap = "6px";
         wrapper.style.justifyContent = "space-between"; 
         wrapper.style.borderRadius = "20px";
+        wrapper.style.border = "5px solid";
+        wrapper.style.borderColor = "transparent";
 
         const icon = document.createElement("i");
         icon.className = "fa fa-save";
@@ -306,17 +308,21 @@ function renderSavedPalettes() {
             icon.style.color = "#17a90a"; // Success Green
             delBtn.style.color = "#180101";
             wrapper.style.backgroundColor = "rgb(245, 250, 247)";
-            wrapper.style.padding = "5px";
+            // wrapper.style.padding = "5px";
             wrapper.style.transition = 
             "background-color 0.3s ease";
-
+            wrapper.style.border = "5px solid white";
+           
             
             setTimeout(() => {
                 icon.className = "fa fa-save";
                 icon.style.color = "#eff4f1";
                 wrapper.style.backgroundColor = "";
                 delBtn.style.color = "#FF0000";
-                wrapper.style.padding = "";
+                wrapper.style.border = "5px solid";
+                wrapper.style.borderColor = "transparent";
+
+                // wrapper.style.padding = "";
             }, 1000);
         };
 
