@@ -24,4 +24,4 @@ Instead of just picking random colors, this tool uses mathematics (Color Theory)
 
 4. Start generating colors!
 
-5. I am cute 
+5. I am cute like super...
