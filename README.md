@@ -23,3 +23,5 @@ Instead of just picking random colors, this tool uses mathematics (Color Theory)
 3. Double-click it to open it in Chrome, Edge, or Safari.
 
 4. Start generating colors!
+
+5. I am cute 
